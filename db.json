@@ -1,0 +1,30 @@
+{
+  "categories": [
+    { "id": "epl", "name": "Ngoại Hạng Anh" },
+    { "id": "laliga", "name": "La Liga" }
+  ],
+  "news": [
+    {
+      "id": "1",
+      "categoryId": "epl",
+      "title": "Arsenal lội ngược dòng ngoạn mục",
+      "summary": "Pháo thủ giành chiến thắng 3-2 vào những phút cuối cùng...",
+      "content": "Chi tiết trận đấu diễn ra vô cùng kịch tính tại sân Emirates...",
+      "imageUrl": "https://placehold.co/600x400/png",
+      "publishedAt": "2026-11-07T20:00:00Z"
+    },
+    {
+      "id": "2",
+      "categoryId": "laliga",
+      "title": "Real Madrid chốt sổ chuyển nhượng",
+      "summary": "Bản hợp đồng bom tấn đã được công bố...",
+      "content": "Florentino Perez lại một lần nữa mang về siêu sao cho dải ngân hà...",
+      "imageUrl": "https://placehold.co/600x400/png",
+      "publishedAt": "2026-11-06T15:30:00Z"
+    }
+  ],
+  "standings": [
+    { "id": 1, "leagueId": "epl", "team": "Arsenal", "points": 30, "position": 1 },
+    { "id": 2, "leagueId": "epl", "team": "Man City", "points": 28, "position": 2 }
+  ]
+}
