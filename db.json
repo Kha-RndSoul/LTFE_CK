@@ -1,7 +1,14 @@
 {
   "categories": [
-    { "id": "epl", "name": "Ngoại Hạng Anh" },
-    { "id": "laliga", "name": "La Liga" }
+    { "id": "tin-nong", "name": "Tin nóng" },
+    { "id": "viet-nam", "name": "Việt Nam" },
+    { "id": "anh", "name": "Anh" },
+    { "id": "tay-ban-nha", "name": "Tây Ban Nha" },
+    { "id": "y", "name": "Ý" },
+    { "id": "phap", "name": "Pháp" },
+    { "id": "duc", "name": "Đức" },
+    { "id": "chau-au", "name": "Châu Âu" },
+    { "id": "chuyen-nhuong", "name": "Chuyển nhượng" }
   ],
   "news": [
     {
