@@ -1,63 +1,44 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { INews } from '../types';
-import { getCategoryById } from '../services/api';
-import { getNewsById } from '../services/api';
+import { ICategory, INews } from '../types';
+import useAPI from '../hooks/useAPI';
+import { BASE_URL } from '../services/api';
 import RequestState from '../components/common/RequestState';
 import './DetailPage.css';
 
 function DetailPage() {
     const { id } = useParams<{ id: string }>();
-    const [article, setArticle] = useState<INews | null>(null);
-    const [categoryName, setCategoryName] = useState('');
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(false);
-    const [attempt, setAttempt] = useState(0);
 
-    useEffect(() => {
-        const controller = new AbortController();
-        setLoading(true);
-        setError(false);
-        setArticle(null);
-        setCategoryName('');
-        async function loadArticle() {
-            try {
-                const news = id ? await getNewsById(id, controller.signal) : null;
-                if (controller.signal.aborted) return;
-                setArticle(news);
-                setLoading(false);
-                if (news) {
-                    // Không che bài viết khi riêng tên chuyên mục bị lỗi.
-                    const category = await getCategoryById(news.categoryId).catch(() => null);
-                    if (!controller.signal.aborted) setCategoryName(category?.name || news.categoryId);
-                }
-            } catch {
-                if (!controller.signal.aborted) {
-                    setError(true);
-                    setLoading(false);
-                }
-            }
-        }
-        loadArticle();
-        return () => controller.abort();
-    }, [id, attempt]);
+    const {
+        data: article,
+        loading,
+        error,
+        refetch,
+    } = useAPI<INews>(id ? `${BASE_URL}/news/${encodeURIComponent(id)}` : null);
+
+    const { data: category } = useAPI<ICategory>(
+        article ? `${BASE_URL}/categories/${encodeURIComponent(article.categoryId)}` : null
+    );
 
     if (loading) return <RequestState kind="loading" />;
-    if (error) return <RequestState kind="error" onRetry={() => setAttempt((value) => value + 1)} />;
+    if (error && error.includes('404')) return <RequestState kind="not-found" />;
+    if (error) return <RequestState kind="error" onRetry={refetch} />;
     if (!article) return <RequestState kind="not-found" />;
+
+    const categoryName = category?.name || article.categoryId;
 
     return (
         <section className="news-detail" aria-labelledby="news-detail-title">
             <nav className="news-detail__breadcrumb" aria-label="Đường dẫn chuyên mục">
                 <Link to="/">Trang chủ</Link><span aria-hidden="true">›</span>
                 <Link to={`/the-thao/${encodeURIComponent(article.categoryId)}`}>
-                    {categoryName || article.categoryId}
+                    {categoryName}
                 </Link>
                 <span aria-hidden="true">›</span><span aria-current="page">Chi tiết tin</span>
             </nav>
             <article className="news-detail__article">
                 <header>
-                    <p className="news-detail__category">{categoryName || article.categoryId}</p>
+                    <p className="news-detail__category">{categoryName}</p>
                     <h1 id="news-detail-title" className="news-detail__title">{article.title}</h1>
                     <div className="news-detail__meta">
                         <time dateTime={article.publishedAt}>

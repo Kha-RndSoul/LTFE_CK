@@ -1,6 +1,6 @@
 import { INews, ICategory, IStanding, IMatch } from '../types';
 
-const BASE_URL = 'http://localhost:8000';
+export const BASE_URL = 'http://localhost:8000';
 
 export const getAllNews = async (): Promise<INews[]> => {
     try {

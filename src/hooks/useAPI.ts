@@ -1,15 +1,20 @@
-// src/hooks/useAPI.ts
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 
 export default function useAPI<T>(url: string | null) {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [reloadKey, setReloadKey] = useState<number>(0);
+
+    const refetch = useCallback(() => {
+        setReloadKey((prev) => prev + 1);
+    }, []);
 
     useEffect(() => {
-        // Nếu chưa có url (ví dụ đang chờ lấy id từ params) thì chưa gọi API
         if (!url) {
+            setData(null);
+            setError(null);
             setLoading(false);
             return;
         }
@@ -28,7 +33,7 @@ export default function useAPI<T>(url: string | null) {
                 }
             })
             .finally(() => setLoading(false));
-    }, [url]);
+    }, [url, reloadKey]);
 
-    return { data, error, loading };
+    return { data, error, loading, refetch };
 }
