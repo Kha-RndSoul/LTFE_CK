@@ -1,82 +1,84 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { INews } from '../types';
+import { getCategoryById } from '../services/api';
+import { getNewsById } from '../services/api';
+import RequestState from '../components/common/RequestState';
 import './DetailPage.css';
 
-const article = {
-  title: 'Trước giờ bóng lăn: Sự chuẩn bị tạo nên khác biệt',
-  category: 'Bóng đá Anh',
-  author: 'Ban biên tập',
-  publishedAt: '2026-11-07T09:00:00+07:00',
-  displayDate: '07/11/2026 · 09:00 (GMT+7)',
-  description:
-    'Một trận đấu hấp dẫn bắt đầu từ những bước chuẩn bị kỹ lưỡng. Sự tập trung, cách tổ chức đội hình và khả năng phối hợp là những yếu tố được người hâm mộ chờ đợi trước giờ bóng lăn.',
-  paragraphs: [
-    'Trên sân tập, các cầu thủ dành thời gian hoàn thiện những pha phối hợp ngắn và duy trì cự ly đội hình. Từng vị trí cần hiểu rõ nhiệm vụ để có thể hỗ trợ đồng đội khi trận đấu diễn ra với tốc độ cao.',
-    'Khả năng kiểm soát khu vực giữa sân thường ảnh hưởng đến nhịp độ thi đấu. Một tập thể giữ được sự kết nối giữa các tuyến sẽ có thêm phương án triển khai bóng và hạn chế khoảng trống trước hàng phòng ngự.',
-  ],
-  tags: ['Bóng đá Anh', 'Trước trận đấu', 'Chiến thuật'],
-};
-
 function DetailPage() {
-  return (
-    <section className="news-detail" aria-labelledby="news-detail-title">
-      <nav className="news-detail__breadcrumb" aria-label="Đường dẫn chuyên mục">
-        <a href="/">Trang chủ</a>
-        <span aria-hidden="true">›</span>
-        <span>{article.category}</span>
-        <span aria-hidden="true">›</span>
-        <span aria-current="page">Chi tiết tin</span>
-      </nav>
+    const { id } = useParams<{ id: string }>();
+    const [article, setArticle] = useState<INews | null>(null);
+    const [categoryName, setCategoryName] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+    const [attempt, setAttempt] = useState(0);
 
-      <article className="news-detail__article">
-        <header>
-          <p className="news-detail__category">{article.category}</p>
-          <h1 id="news-detail-title" className="news-detail__title">
-            {article.title}
-          </h1>
-          <div className="news-detail__meta">
-            <span>Tác giả: <strong>{article.author}</strong></span>
-            <time dateTime={article.publishedAt}>{article.displayDate}</time>
-          </div>
-          <p className="news-detail__lead">{article.description}</p>
-        </header>
+    useEffect(() => {
+        const controller = new AbortController();
+        setLoading(true);
+        setError(false);
+        setArticle(null);
+        setCategoryName('');
+        async function loadArticle() {
+            try {
+                const news = id ? await getNewsById(id, controller.signal) : null;
+                if (controller.signal.aborted) return;
+                setArticle(news);
+                setLoading(false);
+                if (news) {
+                    // Không che bài viết khi riêng tên chuyên mục bị lỗi.
+                    const category = await getCategoryById(news.categoryId).catch(() => null);
+                    if (!controller.signal.aborted) setCategoryName(category?.name || news.categoryId);
+                }
+            } catch {
+                if (!controller.signal.aborted) {
+                    setError(true);
+                    setLoading(false);
+                }
+            }
+        }
+        loadArticle();
+        return () => controller.abort();
+    }, [id, attempt]);
 
-        <figure className="news-detail__figure">
-          {/* Khung ảnh tĩnh; thay bằng thẻ img khi nhóm có ảnh bài viết. */}
-          <div className="news-detail__image-placeholder">
-            <div className="news-detail__pitch" aria-hidden="true">
-              <span className="news-detail__pitch-circle" />
-            </div>
-            <span className="news-detail__image-label">Ảnh minh họa bài viết</span>
-          </div>
-          <figcaption>Không khí chuẩn bị trước giờ bóng lăn — hình minh họa.</figcaption>
-        </figure>
+    if (loading) return <RequestState kind="loading" />;
+    if (error) return <RequestState kind="error" onRetry={() => setAttempt((value) => value + 1)} />;
+    if (!article) return <RequestState kind="not-found" />;
 
-        <div className="news-detail__body">
-          {article.paragraphs.map((paragraph, index) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-          <h2>Sự tập trung trong từng thời điểm</h2>
-          <p>
-            Ngoài chiến thuật, tinh thần thi đấu cũng đóng vai trò quan trọng.
-            Duy trì sự bình tĩnh và đưa ra quyết định hợp lý giúp các cầu thủ
-            tận dụng tốt hơn những cơ hội xuất hiện trên sân.
-          </p>
-          <p>
-            Người hâm mộ chờ đợi một màn so tài cởi mở, nơi cả hai đội thể hiện
-            được bản sắc và mang đến những tình huống bóng đáng nhớ.
-          </p>
-        </div>
-
-        <footer className="news-detail__footer">
-          <p className="news-detail__signature">{article.author}</p>
-          <div className="news-detail__tags" aria-label="Chủ đề bài viết">
-            <strong>Chủ đề:</strong>
-            {article.tags.map((tag) => <span key={tag}>{tag}</span>)}
-          </div>
-        </footer>
-      </article>
-    </section>
-  );
+    return (
+        <section className="news-detail" aria-labelledby="news-detail-title">
+            <nav className="news-detail__breadcrumb" aria-label="Đường dẫn chuyên mục">
+                <Link to="/">Trang chủ</Link><span aria-hidden="true">›</span>
+                <Link to={`/the-thao/${encodeURIComponent(article.categoryId)}`}>
+                    {categoryName || article.categoryId}
+                </Link>
+                <span aria-hidden="true">›</span><span aria-current="page">Chi tiết tin</span>
+            </nav>
+            <article className="news-detail__article">
+                <header>
+                    <p className="news-detail__category">{categoryName || article.categoryId}</p>
+                    <h1 id="news-detail-title" className="news-detail__title">{article.title}</h1>
+                    <div className="news-detail__meta">
+                        <time dateTime={article.publishedAt}>
+                            {new Date(article.publishedAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}
+                        </time>
+                    </div>
+                    <p className="news-detail__lead">{article.summary}</p>
+                </header>
+                {article.imageUrl && (
+                    <figure className="news-detail__figure">
+                        <img className="news-detail__image" src={article.imageUrl} alt={article.title} />
+                    </figure>
+                )}
+                <div className="news-detail__body">
+                    {article.content.split(/\r?\n/).filter((paragraph) => paragraph.trim()).map((paragraph, index) => (
+                        <p key={index}>{paragraph}</p>
+                    ))}
+                </div>
+            </article>
+        </section>
+    );
 }
 
 export default DetailPage;
