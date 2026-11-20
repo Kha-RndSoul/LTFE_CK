@@ -14,9 +14,20 @@ export interface INews {
 }
 
 export interface IStanding {
-    id: number;
+    id: string;
     leagueId: string;
     team: string;
     points: number;
     position: number;
+}
+
+export interface IMatch {
+    id: string;
+    leagueId: string;
+    homeTeam: string;
+    awayTeam: string;
+    homeScore: number | null;
+    awayScore: number | null;
+    kickoff: string;
+    status: 'scheduled' | 'finished' | 'live';
 }

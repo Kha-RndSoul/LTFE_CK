@@ -70,3 +70,10 @@ export const getMatches = async (leagueId: string): Promise<IMatch[]> => {
     const data: IMatch[] = await response.json();
     return data.sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime());
 };
+
+export async function getNewsById(id: string, signal?: AbortSignal): Promise<INews | null> {
+    const response = await fetch(`${BASE_URL}/news/${encodeURIComponent(id)}`, { signal });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error('Không tải được bài viết.');
+    return response.json();
+}
