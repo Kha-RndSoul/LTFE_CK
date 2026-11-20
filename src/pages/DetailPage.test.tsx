@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import DetailPage from './DetailPage';
-import { getNewsById } from './newsApi';
+import { getNewsById } from '../services/api';
 import { getCategoryById } from '../services/api';
 
 jest.mock('./newsApi');
