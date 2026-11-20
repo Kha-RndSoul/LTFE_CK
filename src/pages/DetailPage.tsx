@@ -4,7 +4,7 @@ import { ICategory, INews } from '../types';
 import useAPI from '../hooks/useAPI';
 import { BASE_URL } from '../services/api';
 import RequestState from '../components/common/RequestState';
-import './DetailPage.css';
+import '../assets/DetailPage.css';
 
 function DetailPage() {
     const { id } = useParams<{ id: string }>();
