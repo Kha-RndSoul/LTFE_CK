@@ -4,7 +4,7 @@ import { ICategory, INews } from '../types';
 import useAPI from '../hooks/useAPI';
 import { BASE_URL } from '../services/api';
 import SearchForm from '../components/SearchForm';
-import './SearchPage.css';
+import '../assets/SearchPage.css';
 
 function SearchPage() {
     const [keyword, setKeyword] = useState('');
