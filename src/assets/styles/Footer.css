@@ -1,0 +1,129 @@
+.site-footer {
+    background-color: #f8faf9;
+    color: #333333;
+    border-top: 3px solid #008b3e;
+    margin-top: 40px;
+    font-size: 14px;
+}
+
+.site-footer__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 30px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 35px;
+}
+
+.site-footer__logo {
+    color: #008b3e;
+    text-decoration: none;
+    font-size: 1.8rem;
+    font-weight: 900;
+    font-style: italic;
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.site-footer__desc {
+    line-height: 1.6;
+    color: #555555;
+    margin: 0 0 15px;
+}
+
+.site-footer__badges {
+    display: flex;
+    gap: 10px;
+    font-size: 13px;
+    color: #666666;
+}
+
+.site-footer__heading {
+    color: #00502b;
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e2e8e4;
+    text-transform: uppercase;
+}
+
+.site-footer__nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.site-footer__link {
+    color: #333333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+.site-footer__link:hover {
+    color: #008b3e;
+}
+
+.site-footer__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #555555;
+    line-height: 1.5;
+}
+
+.site-footer__info p {
+    margin: 0;
+}
+
+.site-footer__info strong {
+    color: #222222;
+}
+
+.site-footer__bottom {
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 15px 20px;
+}
+
+.site-footer__bottom-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 13px;
+    color: #666666;
+}
+
+/* Nút tròn lên đầu trang cố định góc dưới phải */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: #008b3e;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0, 139, 62, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 999;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.scroll-top-btn:hover {
+    background-color: #00502b;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 80, 43, 0.45);
+}
+
+.scroll-top-btn:active {
+    transform: translateY(0);
+}
