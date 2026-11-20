@@ -1,78 +1,106 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ICategory, INews } from '../types';
+import useAPI from '../hooks/useAPI';
+import { BASE_URL } from '../services/api';
 import SearchForm from '../components/SearchForm';
 import './SearchPage.css';
 
-const sampleArticles = [
-  {
-    id: 1,
-    category: 'Bóng đá Anh',
-    title: 'Trước giờ bóng lăn: Sự chuẩn bị tạo nên khác biệt',
-    summary: 'Sự tập trung và khả năng phối hợp là những điều người hâm mộ chờ đợi trước trận đấu.',
-    date: '07/11/2026',
-  },
-  {
-    id: 2,
-    category: 'Bóng đá Việt Nam',
-    title: 'Sức trẻ mang đến làn gió mới cho sân cỏ Việt Nam',
-    summary: 'Các cầu thủ trẻ có thêm cơ hội thể hiện và tích lũy kinh nghiệm thi đấu.',
-    date: '06/11/2026',
-  },
-  {
-    id: 3,
-    category: 'Bóng đá châu Âu',
-    title: 'Cuộc đua ở tuyến giữa: Khi chiến thuật lên tiếng',
-    summary: 'Cách bố trí đội hình và kiểm soát khoảng trống tạo nên những màn so tài hấp dẫn.',
-    date: '05/11/2026',
-  },
-];
-
 function SearchPage() {
-  const [keyword, setKeyword] = useState('');
-  const normalizedKeyword = keyword.toLocaleLowerCase('vi');
-  const results = sampleArticles.filter((article) =>
-    `${article.title} ${article.category} ${article.summary}`
-      .toLocaleLowerCase('vi')
-      .includes(normalizedKeyword)
-  );
+    const [keyword, setKeyword] = useState('');
 
-  return (
-    <section className="football-search" aria-labelledby="football-search-title">
-      <nav className="football-search__breadcrumb" aria-label="Đường dẫn chuyên mục">
-        <a href="/">Trang chủ</a>
-        <span aria-hidden="true">›</span>
-        <span aria-current="page">Tìm kiếm</span>
-      </nav>
+    const { data: newsList, loading, error } = useAPI<INews[]>(`${BASE_URL}/news`);
+    const { data: categories } = useAPI<ICategory[]>(`${BASE_URL}/categories`);
 
-      <h1 id="football-search-title">Tìm kiếm tin bóng đá</h1>
-      <SearchForm onSearch={setKeyword} />
+    const categoryMap = useMemo(() => {
+        const map: Record<string, string> = {};
+        categories?.forEach((cat) => {
+            map[cat.id] = cat.name;
+        });
+        return map;
+    }, [categories]);
 
-      <p className="football-search__count" role="status">
-        {keyword ? `Tìm thấy ${results.length} bài viết cho “${keyword}”` : `${results.length} bài viết mẫu`}
-      </p>
+    const results = useMemo(() => {
+        if (!newsList) return [];
+        const normalizedKeyword = keyword.trim().toLocaleLowerCase('vi');
 
-      <div className="football-search__results">
-        {results.map((article) => (
-          <article className="football-search__item" key={article.id}>
-            <div className="football-search__thumbnail" aria-hidden="true">BÓNG ĐÁ</div>
-            <div className="football-search__content">
-              <p className="football-search__category">{article.category}</p>
-              {/* Chưa gắn link: Router và dữ liệu chi tiết sẽ được tích hợp sau. */}
-              <h2>{article.title}</h2>
-              <p className="football-search__summary">{article.summary}</p>
-              <p className="football-search__date">{article.date}</p>
-            </div>
-          </article>
-        ))}
-      </div>
+        return newsList.filter((article) => {
+            const categoryName = categoryMap[article.categoryId] || article.categoryId;
+            return `${article.title} ${categoryName} ${article.summary}`
+                .toLocaleLowerCase('vi')
+                .includes(normalizedKeyword);
+        });
+    }, [newsList, categoryMap, keyword]);
 
-      {results.length === 0 && (
-        <div className="football-search__empty">
-          <h2>Không tìm thấy bài viết</h2>
-          <p>Thử từ khóa khác, chẳng hạn “bóng đá” hoặc “chiến thuật”.</p>
-        </div>
-      )}
-    </section>
-  );
+    return (
+        <section className="football-search" aria-labelledby="football-search-title">
+            <nav className="football-search__breadcrumb" aria-label="Đường dẫn chuyên mục">
+                <Link to="/">Trang chủ</Link>
+                <span aria-hidden="true">›</span>
+                <span aria-current="page">Tìm kiếm</span>
+            </nav>
+
+            <h1 id="football-search-title">Tìm kiếm tin bóng đá</h1>
+            <SearchForm onSearch={setKeyword} />
+
+            {loading && (
+                <p className="football-search__count" role="status">
+                    Đang tải danh sách bài viết...
+                </p>
+            )}
+
+            {error && (
+                <p className="football-search__count" role="status" style={{ color: 'red' }}>
+                    Không tải được dữ liệu tìm kiếm.
+                </p>
+            )}
+
+            {!loading && !error && (
+                <>
+                    <p className="football-search__count" role="status">
+                        {keyword.trim()
+                            ? `Tìm thấy ${results.length} bài viết cho “${keyword}”`
+                            : `Tất cả ${results.length} bài viết`}
+                    </p>
+
+                    <div className="football-search__results">
+                        {results.map((article) => (
+                            <article className="football-search__item" key={article.id}>
+                                <div className="football-search__thumbnail" aria-hidden={!article.imageUrl}>
+                                    {article.imageUrl ? (
+                                        <img
+                                            src={article.imageUrl}
+                                            alt={article.title}
+                                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                        />
+                                    ) : (
+                                        'BÓNG ĐÁ'
+                                    )}
+                                </div>
+                                <div className="football-search__content">
+                                    <p className="football-search__category">
+                                        {categoryMap[article.categoryId] || article.categoryId}
+                                    </p>
+                                    <h2>{article.title}</h2>
+                                    <p className="football-search__summary">{article.summary}</p>
+                                    <p className="football-search__date">
+                                        {new Date(article.publishedAt).toLocaleDateString('vi-VN')}
+                                    </p>
+                                </div>
+                            </article>
+                        ))}
+                    </div>
+
+                    {results.length === 0 && (
+                        <div className="football-search__empty">
+                            <h2>Không tìm thấy bài viết</h2>
+                            <p>Thử từ khóa khác.</p>
+                        </div>
+                    )}
+                </>
+            )}
+        </section>
+    );
 }
 
 export default SearchPage;

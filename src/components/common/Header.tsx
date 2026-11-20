@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ICategory } from '../../types';
-import { getCategories } from '../../services/api';
+import useAPI from '../../hooks/useAPI';
+import { BASE_URL } from '../../services/api';
 
 const Header: React.FC = () => {
-    const [categories, setCategories] = useState<ICategory[]>([]);
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const data = await getCategories();
-            setCategories(data);
-        };
-        fetchCategories();
-    }, []);
+    const { data: categories, loading, error } = useAPI<ICategory[]>(`${BASE_URL}/categories`);
 
     const getCurrentDate = () => {
         const options: Intl.DateTimeFormatOptions = {
@@ -40,8 +33,8 @@ const Header: React.FC = () => {
                         BONGDA24H
                     </Link>
                     <span style={{ color: '#666', borderLeft: '1px solid #ddd', paddingLeft: '20px' }}>
-            {getCurrentDate()}
-          </span>
+                        {getCurrentDate()}
+                    </span>
                 </div>
 
                 <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
@@ -81,7 +74,10 @@ const Header: React.FC = () => {
                     🏠
                 </Link>
 
-                {categories.map((cat) => (
+                {loading && <span style={{ color: '#999', fontWeight: 'normal' }}>Đang tải danh mục...</span>}
+                {error && <span style={{ color: 'red', fontWeight: 'normal' }}>Không tải được danh mục</span>}
+
+                {categories?.map((cat) => (
                     <Link
                         key={cat.id}
                         to={`/the-thao/${cat.id}`}

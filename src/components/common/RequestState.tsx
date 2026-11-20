@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './RequestState.css';
+//import './RequestState.css';
 
 type Props = { kind: 'loading' | 'error' | 'not-found'; onRetry?: () => void };
 
