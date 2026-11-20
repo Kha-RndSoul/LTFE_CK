@@ -1,0 +1,28 @@
+.football-search-form { max-width: 100%; font: inherit; }
+.football-search-form label { display: block; margin-bottom: 6px; color: #454545; font-size: 13px; }
+.football-search-form__row { display: flex; gap: 8px; }
+.football-search-form input {
+  box-sizing: border-box;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid #abb9ae;
+  border-radius: 4px;
+  background: white;
+  font: inherit;
+}
+.football-search-form button {
+  flex-shrink: 0;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 4px;
+  background: #176b39;
+  color: white;
+  font: inherit;
+  cursor: pointer;
+}
+.football-search-form button:hover { background: #10532b; }
+.football-search-form input:focus-visible,
+.football-search-form button:focus-visible { outline: 2px solid #176b39; outline-offset: 3px; }
+@media (max-width: 380px) { .football-search-form__row { flex-direction: column; } }
