@@ -19,15 +19,19 @@ export interface IStanding {
     team: string;
     points: number;
     position: number;
+    played: number; // so tran da dau
+    goalDifference: number; // hieu so ban thang
 }
+
+export type MatchStatus = 'scheduled' | 'live' | 'finished';
 
 export interface IMatch {
     id: string;
     leagueId: string;
     homeTeam: string;
     awayTeam: string;
-    homeScore: number | null;
+    homeScore: number | null; // chua da thi la null
     awayScore: number | null;
-    kickoff: string;
-    status: 'scheduled' | 'finished' | 'live';
+    kickoff: string; // gio da dang ISO, vd: 2026-11-21T12:30:00Z
+    status: MatchStatus;
 }
