@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { ICategory, INews } from '../types';
 import useAPI from '../hooks/useAPI';
 import { BASE_URL } from '../services/api';
+import { isLeague } from '../utils/leagues';
 import NewsCard from '../components/common/NewsCard';
 import Sidebar from '../components/sidebar/Sidebar';
 
@@ -29,6 +30,10 @@ const CategoryPage: React.FC = () => {
     }, [rawNewsList]);
 
     const loading = catLoading || newsLoading;
+
+    // neu la giai dau thi sidebar hien theo giai do
+    // neu khong (tin nong, viet nam...) thi de undefined => dung giai mac dinh
+    const sidebarLeagueId = isLeague(categoryId) ? categoryId : undefined;
 
     const renderNews = () => {
         if (loading) return <p>Đang tải tin tức...</p>;
@@ -58,7 +63,7 @@ const CategoryPage: React.FC = () => {
             </section>
 
             <aside>
-                <Sidebar />
+                <Sidebar leagueId={sidebarLeagueId} />
             </aside>
         </div>
     );
