@@ -1,6 +1,7 @@
 export interface ICategory {
     id: string;
     name: string;
+    parentId?: string; // co thi nam trong muc cha
 }
 
 export interface INews {

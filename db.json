@@ -8,7 +8,10 @@
     { "id": "phap", "name": "Pháp" },
     { "id": "duc", "name": "Đức" },
     { "id": "chau-au", "name": "Châu Âu" },
-    { "id": "chuyen-nhuong", "name": "Chuyển nhượng" }
+    { "id": "chuyen-nhuong", "name": "Chuyển nhượng" },
+    { "id": "c1", "name": "Cúp C1", "parentId": "chau-au" },
+    { "id": "europa-league", "name": "Europa League", "parentId": "chau-au" },
+    { "id": "conference-league", "name": "Europa Conference League", "parentId": "chau-au" }
   ],
   "news": [
     {
@@ -121,7 +124,7 @@
     },
     {
       "id": "13",
-      "categoryId": "chau-au",
+      "categoryId": "c1",
       "title": "Champions League: những điểm nhấn của lượt đấu mới",
       "summary": "Nhiều đội bóng lớn giành chiến thắng ở lượt đấu mới nhất...",
       "content": "Nhiều đội bóng lớn giành chiến thắng ở lượt đấu mới nhất... Noi dung chi tiet (du lieu mau).",
@@ -130,7 +133,7 @@
     },
     {
       "id": "14",
-      "categoryId": "chau-au",
+      "categoryId": "europa-league",
       "title": "Europa League: đại diện nước Anh thắng ngược",
       "summary": "Trận đấu có hai bàn thắng trong 10 phút cuối...",
       "content": "Trận đấu có hai bàn thắng trong 10 phút cuối... Noi dung chi tiet (du lieu mau).",
@@ -163,6 +166,24 @@
       "content": "Mức phí được đồn đoán vượt 60 triệu euro... Noi dung chi tiet (du lieu mau).",
       "imageUrl": "https://placehold.co/600x400/png",
       "publishedAt": "2026-11-10T11:00:00Z"
+    },
+    {
+      "id": "ca-01",
+      "categoryId": "chau-au",
+      "title": "Bóng đá châu Âu: tâm điểm cuối tuần",
+      "summary": "Các giải đấu hàng đầu châu lục bước vào vòng đấu hấp dẫn...",
+      "content": "Các giải đấu hàng đầu châu lục bước vào vòng đấu hấp dẫn... Noi dung chi tiet (du lieu mau).",
+      "imageUrl": "https://placehold.co/600x400/png",
+      "publishedAt": "2026-11-10T15:00:00Z"
+    },
+    {
+      "id": "cfl-01",
+      "categoryId": "conference-league",
+      "title": "Conference League: cuộc đua vào vòng loại trực tiếp",
+      "summary": "Nhiều đội bóng cạnh tranh suất đi tiếp ở lượt đấu mới...",
+      "content": "Nhiều đội bóng cạnh tranh suất đi tiếp ở lượt đấu mới... Noi dung chi tiet (du lieu mau).",
+      "imageUrl": "https://placehold.co/600x400/png",
+      "publishedAt": "2026-11-06T21:00:00Z"
     }
   ],
   "standings": [
@@ -206,14 +227,14 @@
     { "id": "38", "leagueId": "duc", "team": "Frankfurt", "points": 19, "position": 6, "played": 12, "goalDifference": 3 },
     { "id": "39", "leagueId": "duc", "team": "Freiburg", "points": 17, "position": 7, "played": 12, "goalDifference": 0 },
     { "id": "40", "leagueId": "duc", "team": "Wolfsburg", "points": 15, "position": 8, "played": 12, "goalDifference": -3 },
-    { "id": "41", "leagueId": "chau-au", "team": "Liverpool", "points": 12, "position": 1, "played": 4, "goalDifference": 8 },
-    { "id": "42", "leagueId": "chau-au", "team": "Barcelona", "points": 12, "position": 2, "played": 4, "goalDifference": 7 },
-    { "id": "43", "leagueId": "chau-au", "team": "Bayern Munich", "points": 10, "position": 3, "played": 4, "goalDifference": 9 },
-    { "id": "44", "leagueId": "chau-au", "team": "Inter", "points": 10, "position": 4, "played": 4, "goalDifference": 6 },
-    { "id": "45", "leagueId": "chau-au", "team": "Arsenal", "points": 9, "position": 5, "played": 4, "goalDifference": 5 },
-    { "id": "46", "leagueId": "chau-au", "team": "PSG", "points": 9, "position": 6, "played": 4, "goalDifference": 4 },
-    { "id": "47", "leagueId": "chau-au", "team": "Real Madrid", "points": 9, "position": 7, "played": 4, "goalDifference": 3 },
-    { "id": "48", "leagueId": "chau-au", "team": "Man City", "points": 7, "position": 8, "played": 4, "goalDifference": 2 }
+    { "id": "41", "leagueId": "c1", "team": "Liverpool", "points": 12, "position": 1, "played": 4, "goalDifference": 8 },
+    { "id": "42", "leagueId": "c1", "team": "Barcelona", "points": 12, "position": 2, "played": 4, "goalDifference": 7 },
+    { "id": "43", "leagueId": "c1", "team": "Bayern Munich", "points": 10, "position": 3, "played": 4, "goalDifference": 9 },
+    { "id": "44", "leagueId": "c1", "team": "Inter", "points": 10, "position": 4, "played": 4, "goalDifference": 6 },
+    { "id": "45", "leagueId": "c1", "team": "Arsenal", "points": 9, "position": 5, "played": 4, "goalDifference": 5 },
+    { "id": "46", "leagueId": "c1", "team": "PSG", "points": 9, "position": 6, "played": 4, "goalDifference": 4 },
+    { "id": "47", "leagueId": "c1", "team": "Real Madrid", "points": 9, "position": 7, "played": 4, "goalDifference": 3 },
+    { "id": "48", "leagueId": "c1", "team": "Man City", "points": 7, "position": 8, "played": 4, "goalDifference": 2 }
   ],
   "matches": [
     { "id": "1", "leagueId": "anh", "homeTeam": "Arsenal", "awayTeam": "Chelsea", "homeScore": 2, "awayScore": 1, "kickoff": "2026-11-07T12:30:00Z", "status": "finished" },
@@ -246,11 +267,11 @@
     { "id": "28", "leagueId": "duc", "homeTeam": "RB Leipzig", "awayTeam": "Dortmund", "homeScore": null, "awayScore": null, "kickoff": "2026-11-21T15:00:00Z", "status": "scheduled" },
     { "id": "29", "leagueId": "duc", "homeTeam": "Frankfurt", "awayTeam": "Freiburg", "homeScore": null, "awayScore": null, "kickoff": "2026-11-22T13:00:00Z", "status": "scheduled" },
     { "id": "30", "leagueId": "duc", "homeTeam": "Stuttgart", "awayTeam": "Wolfsburg", "homeScore": null, "awayScore": null, "kickoff": "2026-11-22T14:30:00Z", "status": "scheduled" },
-    { "id": "31", "leagueId": "chau-au", "homeTeam": "Arsenal", "awayTeam": "Inter", "homeScore": 1, "awayScore": 0, "kickoff": "2026-11-07T12:30:00Z", "status": "finished" },
-    { "id": "32", "leagueId": "chau-au", "homeTeam": "Real Madrid", "awayTeam": "PSG", "homeScore": 2, "awayScore": 2, "kickoff": "2026-11-08T14:00:00Z", "status": "finished" },
-    { "id": "33", "leagueId": "chau-au", "homeTeam": "Liverpool", "awayTeam": "Barcelona", "homeScore": null, "awayScore": null, "kickoff": "2026-11-21T12:30:00Z", "status": "scheduled" },
-    { "id": "34", "leagueId": "chau-au", "homeTeam": "Bayern Munich", "awayTeam": "Man City", "homeScore": null, "awayScore": null, "kickoff": "2026-11-21T15:00:00Z", "status": "scheduled" },
-    { "id": "35", "leagueId": "chau-au", "homeTeam": "Inter", "awayTeam": "Real Madrid", "homeScore": null, "awayScore": null, "kickoff": "2026-11-22T13:00:00Z", "status": "scheduled" },
-    { "id": "36", "leagueId": "chau-au", "homeTeam": "PSG", "awayTeam": "Arsenal", "homeScore": null, "awayScore": null, "kickoff": "2026-11-22T14:30:00Z", "status": "scheduled" }
+    { "id": "31", "leagueId": "c1", "homeTeam": "Arsenal", "awayTeam": "Inter", "homeScore": 1, "awayScore": 0, "kickoff": "2026-11-07T12:30:00Z", "status": "finished" },
+    { "id": "32", "leagueId": "c1", "homeTeam": "Real Madrid", "awayTeam": "PSG", "homeScore": 2, "awayScore": 2, "kickoff": "2026-11-08T14:00:00Z", "status": "finished" },
+    { "id": "33", "leagueId": "c1", "homeTeam": "Liverpool", "awayTeam": "Barcelona", "homeScore": null, "awayScore": null, "kickoff": "2026-11-21T12:30:00Z", "status": "scheduled" },
+    { "id": "34", "leagueId": "c1", "homeTeam": "Bayern Munich", "awayTeam": "Man City", "homeScore": null, "awayScore": null, "kickoff": "2026-11-21T15:00:00Z", "status": "scheduled" },
+    { "id": "35", "leagueId": "c1", "homeTeam": "Inter", "awayTeam": "Real Madrid", "homeScore": null, "awayScore": null, "kickoff": "2026-11-22T13:00:00Z", "status": "scheduled" },
+    { "id": "36", "leagueId": "c1", "homeTeam": "PSG", "awayTeam": "Arsenal", "homeScore": null, "awayScore": null, "kickoff": "2026-11-22T14:30:00Z", "status": "scheduled" }
   ]
 }
