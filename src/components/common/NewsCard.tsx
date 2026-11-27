@@ -1,39 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { INews } from '../../types';
 import { Link } from 'react-router-dom';
+import '../../assets/styles/NewsCard.css';
 
 interface NewsCardProps {
     article: INews;
+    categoryName?: string;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ article }) => {
+const NewsCard: React.FC<NewsCardProps> = ({ article, categoryName }) => {
+    const [imgError, setImgError] = useState(false);
+
     return (
-        <div style={{
-            border: '1px solid #ddd',
-            borderRadius: '8px',
-            padding: '15px',
-            marginBottom: '15px',
-            display: 'flex',
-            gap: '15px'
-        }}>
-            <Link to={`/tin-tuc/${encodeURIComponent(article.id)}`} aria-label={`Đọc bài: ${article.title}`}>
-            <img
-                src={article.imageUrl}
-                alt={article.title}
-                style={{ width: '200px', height: '130px', objectFit: 'cover', borderRadius: '4px' }}
-            />
+        <article className="news-card">
+            <Link
+                to={`/tin-tuc/${encodeURIComponent(article.id)}`}
+                aria-label={`Đọc bài: ${article.title}`}
+                className="news-card__thumb-link"
+            >
+                {article.imageUrl && !imgError ? (
+                    <img
+                        src={article.imageUrl}
+                        alt={article.title}
+                        className="news-card__thumb"
+                        onError={() => setImgError(true)}
+                    />
+                ) : (
+                    <span className="news-card__thumb-fallback">BONGDA24H</span>
+                )}
             </Link>
 
-            <div>
-                <h3 style={{ marginTop: 0, color: '#00285e' }}>
-                    <Link to={`/tin-tuc/${encodeURIComponent(article.id)}`} style={{ color: 'inherit' }}>
-                        {article.title}
-                    </Link>
-                </h3>
-                <p style={{ color: '#555' }}>{article.summary}</p>
-                <small style={{ color: '#999' }}>{new Date(article.publishedAt).toLocaleDateString('vi-VN')}</small>
+            <div className="news-card__body">
+                <div>
+                    {categoryName && <span className="news-card__badge">{categoryName}</span>}
+                    <h3 className="news-card__title">
+                        <Link to={`/tin-tuc/${encodeURIComponent(article.id)}`}>
+                            {article.title}
+                        </Link>
+                    </h3>
+                    <p className="news-card__summary">{article.summary}</p>
+                </div>
+                <small className="news-card__date">
+                    {new Date(article.publishedAt).toLocaleDateString('vi-VN')}
+                </small>
             </div>
-        </div>
+        </article>
     );
 };
 
