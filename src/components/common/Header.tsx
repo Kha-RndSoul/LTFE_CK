@@ -1,10 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { ICategory } from '../../types';
 import useAPI from '../../hooks/useAPI';
 import { BASE_URL } from '../../services/api';
+import SearchForm from '../SearchForm';
 
 const Header: React.FC = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    const [params] = useSearchParams();
     const { data: categories, loading, error } = useAPI<ICategory[]>(`${BASE_URL}/categories`);
 
     const getCurrentDate = () => {
@@ -22,13 +26,15 @@ const Header: React.FC = () => {
 
             <div style={{
                 display: 'flex',
+                flexWrap: 'wrap',
+                gap: '16px',
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 padding: '15px 40px',
                 borderBottom: '1px solid #eee'
             }}>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '20px' }}>
                     <Link to="/" style={{ color: '#008b3e', textDecoration: 'none', fontSize: '2rem', fontWeight: '900', fontStyle: 'italic' }}>
                         BONGDA24H
                     </Link>
@@ -37,23 +43,12 @@ const Header: React.FC = () => {
                     </span>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '30px', maxWidth: '100%' }}>
 
-                    <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        border: '1px solid #ddd',
-                        borderRadius: '20px',
-                        padding: '5px 15px',
-                        backgroundColor: '#f9f9f9'
-                    }}>
-                        <input
-                            type="text"
-                            placeholder="Tìm kiếm..."
-                            style={{ border: 'none', outline: 'none', width: '200px', backgroundColor: 'transparent' }}
-                        />
-                        <span style={{ cursor: 'pointer', fontSize: '16px' }}>🔍</span>
-                    </div>
+                    <SearchForm
+                        initialKeyword={location.pathname === '/tim-kiem' ? params.get('q') || '' : ''}
+                        onSearch={(q) => navigate(`/tim-kiem?${new URLSearchParams({ q })}`)}
+                    />
 
                     <div style={{ display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer', color: '#333' }}>
                         <span style={{ fontSize: '18px' }}>👤</span>
@@ -67,6 +62,8 @@ const Header: React.FC = () => {
                 alignItems: 'center',
                 padding: '12px 40px',
                 gap: '25px',
+                overflowX: 'auto',
+                whiteSpace: 'nowrap',
                 fontWeight: 'bold',
                 fontSize: '15px'
             }}>
