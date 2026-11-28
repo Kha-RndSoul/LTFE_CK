@@ -14,6 +14,7 @@ function DetailPage() {
         data: article,
         loading,
         error,
+        status,
         refetch,
     } = useAPI<INews>(id ? `${BASE_URL}/news/${encodeURIComponent(id)}` : null);
 
@@ -30,7 +31,7 @@ function DetailPage() {
         .slice(0, 3);
 
     if (loading) return <RequestState kind="loading" />;
-    if (error && error.includes('404')) return <RequestState kind="not-found" />;
+    if (status === 404) return <RequestState kind="not-found" />;
     if (error) return <RequestState kind="error" onRetry={refetch} />;
     if (!article) return <RequestState kind="not-found" />;
 

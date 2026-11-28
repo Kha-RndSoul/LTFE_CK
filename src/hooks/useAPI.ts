@@ -5,6 +5,7 @@ export default function useAPI<T>(url: string | null) {
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [status, setStatus] = useState<number | null>(null);
     const [reloadKey, setReloadKey] = useState<number>(0);
 
     const refetch = useCallback(() => {
@@ -12,28 +13,33 @@ export default function useAPI<T>(url: string | null) {
     }, []);
 
     useEffect(() => {
+        const controller = new AbortController();
+        setData(null);
+        setError(null);
+        setStatus(null);
         if (!url) {
-            setData(null);
-            setError(null);
             setLoading(false);
             return;
         }
 
         setLoading(true);
-        setError(null);
-
-        axios<T>(url)
+        axios<T>(url, { signal: controller.signal })
             .then((response) => {
-                setData(response.data);
+                if (!controller.signal.aborted) setData(response.data);
             })
             .catch((err) => {
-                if (!axios.isCancel(err)) {
+                if (!controller.signal.aborted) {
                     setData(null);
                     setError(err.message || 'Lỗi gọi API');
+                    setStatus(err.response?.status || null);
                 }
             })
-            .finally(() => setLoading(false));
+            .finally(() => {
+                if (!controller.signal.aborted) setLoading(false);
+            });
+
+        return () => controller.abort();
     }, [url, reloadKey]);
 
-    return { data, error, loading, refetch };
+    return { data, error, loading, status, refetch };
 }
