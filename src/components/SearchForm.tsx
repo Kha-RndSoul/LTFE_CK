@@ -1,5 +1,5 @@
 import React, { useEffect, useId, useState } from 'react';
-import '../assets/SearchForm.css';
+import '../assets/styles/SearchForm.css';
 
 type Props = { onSearch: (keyword: string) => void; initialKeyword?: string };
 

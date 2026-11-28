@@ -4,7 +4,8 @@ import { ICategory, INews } from '../types';
 import useAPI from '../hooks/useAPI';
 import { BASE_URL } from '../services/api';
 import RequestState from '../components/common/RequestState';
-import '../assets/DetailPage.css';
+import NewsCard from '../components/common/NewsCard';
+import '../assets/styles/DetailPage.css';
 
 function DetailPage() {
     const { id } = useParams<{ id: string }>();
@@ -13,6 +14,7 @@ function DetailPage() {
         data: article,
         loading,
         error,
+        status,
         refetch,
     } = useAPI<INews>(id ? `${BASE_URL}/news/${encodeURIComponent(id)}` : null);
 
@@ -20,8 +22,16 @@ function DetailPage() {
         article ? `${BASE_URL}/categories/${encodeURIComponent(article.categoryId)}` : null
     );
 
+    const related = useAPI<INews[]>(
+        article ? `${BASE_URL}/news?categoryId=${encodeURIComponent(article.categoryId)}` : null
+    );
+    const relatedNews = (related.data || [])
+        .filter((item) => item.id !== article?.id)
+        .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
+        .slice(0, 3);
+
     if (loading) return <RequestState kind="loading" />;
-    if (error && error.includes('404')) return <RequestState kind="not-found" />;
+    if (status === 404) return <RequestState kind="not-found" />;
     if (error) return <RequestState kind="error" onRetry={refetch} />;
     if (!article) return <RequestState kind="not-found" />;
 
@@ -58,6 +68,14 @@ function DetailPage() {
                     ))}
                 </div>
             </article>
+            <section className="news-detail__related" aria-label="Tin liên quan">
+                <h2>Tin liên quan</h2>
+                {related.loading ? <p role="status">Đang tải tin liên quan...</p> : related.error ? (
+                    <p>Không tải được tin liên quan. <button onClick={related.refetch}>Thử lại tin liên quan</button></p>
+                ) : relatedNews.length === 0 ? <p>Chưa có tin liên quan.</p> : (
+                    relatedNews.map((item) => <NewsCard key={item.id} article={item} />)
+                )}
+            </section>
         </section>
     );
 }

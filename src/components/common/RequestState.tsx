@@ -1,12 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//import './RequestState.css';
+import '../../assets/styles/RequestState.css';
 
 type Props = { kind: 'loading' | 'error' | 'not-found'; onRetry?: () => void };
 
 function RequestState({ kind, onRetry }: Props) {
   if (kind === 'loading') {
-    return <p className="request-state" role="status">Đang tải dữ liệu...</p>;
+    return (
+      <div className="request-state request-state--loading" role="status">
+        <span className="request-state__spinner" aria-hidden="true" />
+        Đang tải dữ liệu...
+      </div>
+    );
   }
   return (
     <div className="request-state" role={kind === 'error' ? 'alert' : undefined}>
